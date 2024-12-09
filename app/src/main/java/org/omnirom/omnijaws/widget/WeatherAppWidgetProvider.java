@@ -278,9 +278,11 @@ public class WeatherAppWidgetProvider extends AppWidgetProvider {
         int largelWidgetResId = R.layout.weather_appwidget_large_system;
         int wideWidgetResId = R.layout.weather_appwidget_wide_system;
 
+        boolean isPackOutline = Config.getIconPack(context).equals("org.omnirom.omnijaws.outline");
+
         switch (theme) {
             case 1:
-                if (weatherClient.isOutlineIconPackage()) {
+                if (isPackOutline) {
                     smallWidgetResId = R.layout.weather_appwidget_small_tint_system;
                     largelWidgetResId = R.layout.weather_appwidget_large_tint_system;
                     wideWidgetResId = R.layout.weather_appwidget_wide_tint_system;
@@ -291,7 +293,7 @@ public class WeatherAppWidgetProvider extends AppWidgetProvider {
                 }
                 break;
             case 2:
-                if (weatherClient.isOutlineIconPackage()) {
+                if (isPackOutline) {
                     smallWidgetResId = R.layout.weather_appwidget_small_tint_dark;
                     largelWidgetResId = R.layout.weather_appwidget_large_tint_dark;
                     wideWidgetResId = R.layout.weather_appwidget_wide_tint_dark;
@@ -302,7 +304,7 @@ public class WeatherAppWidgetProvider extends AppWidgetProvider {
                 }
                 break;
             case 3:
-                if (weatherClient.isOutlineIconPackage()) {
+                if (isPackOutline) {
                     smallWidgetResId = R.layout.weather_appwidget_small_tint_light;
                     largelWidgetResId = R.layout.weather_appwidget_large_tint_light;
                     wideWidgetResId = R.layout.weather_appwidget_wide_tint_light;
