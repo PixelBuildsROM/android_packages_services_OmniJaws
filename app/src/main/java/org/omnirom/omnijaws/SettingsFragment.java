@@ -77,7 +77,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnPref
     private Preference mUpdateStatus;
     private Handler mHandler = new Handler();
     protected boolean mShowIconPack = true;
-    private EditTextPreference mOwmKey;
     private OmniJawsClient mWeatherClient;
     private Preference mCustomLocationActivity;
     private static final String PREF_KEY_CUSTOM_LOCATION = "weather_custom_location";
@@ -189,12 +188,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnPref
         }
         mUpdateStatus = findPreference(PREF_KEY_UPDATE_STATUS);
 
-        mOwmKey = (EditTextPreference) findPreference(Config.PREF_KEY_OWM_KEY);
-        final String customKey = Config.getOwmKey(getContext());
-        mOwmKey.setSummary(TextUtils.isEmpty(customKey) ?
-                getResources().getString(R.string.service_disabled) : customKey);
-        mOwmKey.setOnPreferenceChangeListener(this);
-
         mCustomLocationActivity = findPreference(PREF_KEY_CUSTOM_LOCATION);
         mCustomLocationActivity.setSummary(Config.getLocationName(getContext()));
     }
@@ -265,12 +258,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnPref
             Config.setIconPack(getContext(), value);
             int valueIndex = mWeatherIconPack.findIndexOfValue(value);
             mWeatherIconPack.setSummary(mWeatherIconPack.getEntries()[valueIndex]);
-            forceRefreshWeatherSettings();
-            return true;
-        } else if (preference == mOwmKey) {
-            String value = (String) newValue;
-            mOwmKey.setSummary(TextUtils.isEmpty(value) ?
-                    getResources().getString(R.string.service_disabled) : value);
             forceRefreshWeatherSettings();
             return true;
         }

@@ -45,15 +45,6 @@
         android:entryValues="@array/provider_values"
         android:dependency="enable" />
 
-    <EditTextPreference
-        android:key="owm_key"
-        android:title="@string/owm_key"
-        android:dialogTitle="@string/owm_key"
-        android:singleLine="true"
-        android:inputType="textNoSuggestions"
-        android:dependency="enable"
-        android:persistent="true" />
-
     <ListPreference
         android:key="units"
         android:title="@string/units_title"

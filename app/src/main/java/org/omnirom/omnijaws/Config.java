@@ -36,7 +36,6 @@ public class Config {
     public static final String PREF_KEY_UPDATE_INTERVAL = "update_interval";
     public static final String PREF_KEY_ICON_PACK = "icon_pack";
     public static final String PREF_KEY_UPDATE_ERROR = "update_error";
-    public static final String PREF_KEY_OWM_KEY = "owm_key";
     public static final String PREF_KEY_HISTORY = "history";
     public static final String PREF_KEY_HISTORY_SIZE = "history_size";
 
@@ -49,8 +48,6 @@ public class Config {
             case "0":
                 return new MeteoWeatherProvider(context);
             case "1":
-                return new OpenWeatherMapProvider(context);
-            case "2":
                 return new METNorwayProvider(context);
         }
     }
@@ -65,8 +62,6 @@ public class Config {
             case "0":
                 return "Open-Meteo";
             case "1":
-                return "OpenWeatherMap";
-            case "2":
                 return "MET Norway";
         }
     }
@@ -211,13 +206,6 @@ public class Config {
             return true;
         }
         return false;
-    }
-
-    public static String getOwmKey(Context context) {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
-
-        return prefs.getString(PREF_KEY_OWM_KEY, null);
     }
 
     public static boolean isHistoryOn(Context context) {
