@@ -116,7 +116,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnPref
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        mWeatherClient = new OmniJawsClient(getContext());
+        mWeatherClient = OmniJawsClient.get();
 
         doLoadPreferences();
     }
@@ -195,7 +195,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnPref
     @Override
     public void onResume() {
         super.onResume();
-        mWeatherClient.addObserver(this);
+        mWeatherClient.addObserver(getContext(), this);
         // values can be changed from outside
         getPreferenceScreen().removeAll();
         doLoadPreferences();
@@ -209,7 +209,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnPref
     @Override
     public void onPause() {
         super.onPause();
-        mWeatherClient.removeObserver(this);
+        mWeatherClient.removeObserver(getContext(), this);
     }
 
     @Override
@@ -414,7 +414,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnPref
     }
 
     private void queryAndUpdateWeather() {
-        mWeatherClient.queryWeather();
+        mWeatherClient.queryWeather(getContext());
         if (mWeatherClient.getWeatherInfo() != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override

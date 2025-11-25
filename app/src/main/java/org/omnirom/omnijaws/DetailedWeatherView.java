@@ -51,6 +51,7 @@ public class DetailedWeatherView extends FrameLayout {
     private TextView mForecastText3;
     private TextView mForecastText4;
     private OmniJawsClient mWeatherClient;
+    private Context mContext;
     private View mCurrentView;
     private TextView mCurrentText;
     private View mProgressContainer;
@@ -82,6 +83,7 @@ public class DetailedWeatherView extends FrameLayout {
 
     public DetailedWeatherView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mContext = context;
     }
 
     public void setWeatherClient(OmniJawsClient client) {
@@ -131,7 +133,7 @@ public class DetailedWeatherView extends FrameLayout {
         mActivity.updateHourColor();
         mProgressContainer.setVisibility(View.GONE);
 
-        boolean serviceDisabled = !mWeatherClient.isOmniJawsEnabled();
+        boolean serviceDisabled = !mWeatherClient.isOmniJawsEnabled(mContext);
         if (weatherData == null || serviceDisabled) {
             setErrorView();
             if (!serviceDisabled) {
@@ -147,7 +149,7 @@ public class DetailedWeatherView extends FrameLayout {
         mWeatherLine.setVisibility(View.VISIBLE);
 
         Long timeStamp = weatherData.timeStamp;
-        String format = DateFormat.is24HourFormat(getContext()) ? "HH:mm" : "hh:mm a";
+        String format = DateFormat.is24HourFormat(mContext) ? "HH:mm" : "hh:mm a";
         SimpleDateFormat sdf = new SimpleDateFormat(format);
 
         mCurrentWind.setText(weatherData.windSpeed + " " + weatherData.windUnits);
@@ -161,7 +163,7 @@ public class DetailedWeatherView extends FrameLayout {
         Calendar cal = Calendar.getInstance();
         String dayShort = sdf.format(new Date(cal.getTimeInMillis()));
 
-        Drawable d = mWeatherClient.getWeatherConditionImage(weatherData.forecasts.get(0).conditionCode);
+        Drawable d = mWeatherClient.getWeatherConditionImage(mContext, weatherData.forecasts.get(0).conditionCode);
         mForecastImage0.setImageDrawable(d);
         mForecastText0.setText(dayShort);
         mForecastData0.setText(getWeatherDataString(weatherData.forecasts.get(0).low, weatherData.forecasts.get(0).high,
@@ -170,7 +172,7 @@ public class DetailedWeatherView extends FrameLayout {
         cal.add(Calendar.DATE, 1);
         dayShort = sdf.format(new Date(cal.getTimeInMillis()));
 
-        d = mWeatherClient.getWeatherConditionImage(weatherData.forecasts.get(1).conditionCode);
+        d = mWeatherClient.getWeatherConditionImage(mContext, weatherData.forecasts.get(1).conditionCode);
         mForecastImage1.setImageDrawable(d);
         mForecastText1.setText(dayShort);
         mForecastData1.setText(getWeatherDataString(weatherData.forecasts.get(1).low, weatherData.forecasts.get(1).high,
@@ -178,7 +180,7 @@ public class DetailedWeatherView extends FrameLayout {
         cal.add(Calendar.DATE, 1);
         dayShort = sdf.format(new Date(cal.getTimeInMillis()));
 
-        d = mWeatherClient.getWeatherConditionImage(weatherData.forecasts.get(2).conditionCode);
+        d = mWeatherClient.getWeatherConditionImage(mContext, weatherData.forecasts.get(2).conditionCode);
         mForecastImage2.setImageDrawable(d);
         mForecastText2.setText(dayShort);
         mForecastData2.setText(getWeatherDataString(weatherData.forecasts.get(2).low, weatherData.forecasts.get(2).high,
@@ -186,7 +188,7 @@ public class DetailedWeatherView extends FrameLayout {
         cal.add(Calendar.DATE, 1);
         dayShort = sdf.format(new Date(cal.getTimeInMillis()));
 
-        d = mWeatherClient.getWeatherConditionImage(weatherData.forecasts.get(3).conditionCode);
+        d = mWeatherClient.getWeatherConditionImage(mContext, weatherData.forecasts.get(3).conditionCode);
         mForecastImage3.setImageDrawable(d);
         mForecastText3.setText(dayShort);
         mForecastData3.setText(getWeatherDataString(weatherData.forecasts.get(3).low, weatherData.forecasts.get(3).high,
@@ -194,12 +196,12 @@ public class DetailedWeatherView extends FrameLayout {
         cal.add(Calendar.DATE, 1);
         dayShort = sdf.format(new Date(cal.getTimeInMillis()));
 
-        d = mWeatherClient.getWeatherConditionImage(weatherData.forecasts.get(4).conditionCode);
+        d = mWeatherClient.getWeatherConditionImage(mContext, weatherData.forecasts.get(4).conditionCode);
         mForecastImage4.setImageDrawable(d);
         mForecastText4.setText(dayShort);
         mForecastData4.setText(getWeatherDataString(weatherData.forecasts.get(4).low, weatherData.forecasts.get(4).high,
                 weatherData.tempUnits));
-        d = mWeatherClient.getWeatherConditionImage(weatherData.conditionCode);
+        d = mWeatherClient.getWeatherConditionImage(mContext, weatherData.conditionCode);
         mCurrentImage.setImageDrawable(d);
         mCurrentText.setText(weatherData.temp + weatherData.tempUnits);
     }
@@ -248,14 +250,12 @@ public class DetailedWeatherView extends FrameLayout {
     }
 
     public void forceRefresh() {
-        if (mWeatherClient.isOmniJawsEnabled()) {
+        if (mWeatherClient.isOmniJawsEnabled(mContext)) {
             startProgress();
             ContentValues values = new ContentValues();
             values.put(WeatherContentProvider.COLUMN_FORCE_REFRESH, true);
-            getContext().getContentResolver().update(OmniJawsClient.CONTROL_URI,
+            mContext.getContentResolver().update(OmniJawsClient.CONTROL_URI,
                     values, "", null);
-
-            //WeatherUpdateService.scheduleUpdateNow(getContext());
         }
     }
 }

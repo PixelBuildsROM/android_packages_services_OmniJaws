@@ -17,6 +17,7 @@
  */
 package org.omnirom.omnijaws;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,23 +58,29 @@ public class WeatherActivity extends AppCompatActivity implements OmniJawsClient
         refresh.setOnClickListener(v -> {
             mDetailedView.forceRefresh();
         });
-        mWeatherClient = new OmniJawsClient(this);
+        mWeatherClient = OmniJawsClient.get();
         mDetailedView.setActivity(this);
         mDetailedView.setWeatherClient(mWeatherClient);
         updateHourColor();
     }
 
+    public Intent getSettingsIntent() {
+        Intent settings = new Intent(Intent.ACTION_MAIN)
+                .setClassName(OmniJawsClient.SERVICE_PACKAGE, OmniJawsClient.SERVICE_PACKAGE + ".SettingsActivity");
+        return settings;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-         mWeatherClient.addObserver(this);
+         mWeatherClient.addObserver(this, this);
          queryAndUpdateWeather();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mWeatherClient.removeObserver(this);
+        mWeatherClient.removeObserver(this, this);
     }
 
     @Override
@@ -89,7 +96,7 @@ public class WeatherActivity extends AppCompatActivity implements OmniJawsClient
     }
 
     private void queryAndUpdateWeather() {
-        mWeatherClient.queryWeather();
+        mWeatherClient.queryWeather(this);
         mDetailedView.updateWeatherData(mWeatherClient.getWeatherInfo());
     }
 
