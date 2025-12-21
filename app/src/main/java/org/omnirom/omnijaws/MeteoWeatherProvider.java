@@ -170,11 +170,21 @@ public class MeteoWeatherProvider extends AbstractWeatherProvider {
         WEATHER_CONDITION_MAPPING.put(61, "Light Rain");
         WEATHER_CONDITION_MAPPING.put(63, "Rain");
         WEATHER_CONDITION_MAPPING.put(65, "Heavy Rain");
+        WEATHER_CONDITION_MAPPING.put(70, "Light Snow");
+        WEATHER_CONDITION_MAPPING.put(71, "Light Snow");
+        WEATHER_CONDITION_MAPPING.put(72, "Snow");
+        WEATHER_CONDITION_MAPPING.put(73, "Snow");
+        WEATHER_CONDITION_MAPPING.put(74, "Heavy Snow");
+        WEATHER_CONDITION_MAPPING.put(75, "Heavy Snow");
 		WEATHER_CONDITION_MAPPING.put(80, "Light Showers");
         WEATHER_CONDITION_MAPPING.put(81, "Moderate Showers");
         WEATHER_CONDITION_MAPPING.put(82, "Heavy Showers");
-        WEATHER_CONDITION_MAPPING.put(85, "Light Snow");
+        WEATHER_CONDITION_MAPPING.put(83, "Rain and snow");
+        WEATHER_CONDITION_MAPPING.put(84, "Rain and snow showers");
+        WEATHER_CONDITION_MAPPING.put(85, "Snow");
         WEATHER_CONDITION_MAPPING.put(86, "Heavy Snow");
+        WEATHER_CONDITION_MAPPING.put(87, "Rain, snow and hail");
+        WEATHER_CONDITION_MAPPING.put(88, "Rain, snow and hail");
         WEATHER_CONDITION_MAPPING.put(95, "Thunderstorms");
         WEATHER_CONDITION_MAPPING.put(96, "Thunderstorms and Hail");
         WEATHER_CONDITION_MAPPING.put(99, "Thunderstorms and Heavy Hail");
@@ -189,10 +199,22 @@ public class MeteoWeatherProvider extends AbstractWeatherProvider {
                 return 4;
 
             // Snow
-            case 85:
+            case 70:
+            case 71:
                 return 14; // light snow
+            case 72:
+            case 73:
+            case 85:
+                return 16; // snow
+            case 74:
+            case 75:
             case 86:
                 return 41; // heavy snow
+            case 83:
+            case 84:
+            case 87:
+            case 88:
+                return 5; // rain and snow
 
             // Drizzle
             case 51:       // light drizzle
